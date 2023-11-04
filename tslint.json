@@ -14,7 +14,11 @@
         "arrow-parens"                : false,
         "max-line-length"             : false,
         "no-trailing-whitespace"      : false,
-        "semicolon" : false,
+        "whitespace"                  : false,
+        "typedef-whitespace"          : false,
+        "semicolon"                   : false,
+        "align"                       : false,
+        "no-debugger"                 : false,
         "deprecation"                 : {
             "severity" : "warn"
         },
