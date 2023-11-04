@@ -21,15 +21,14 @@ export const CONFIG: any = {
         pixelArt : true,
     },
     physics         : {
-        default : 'matter',
-        matter  : {
+        default : 'arcade',
+        arcade  : {
             gravity : {
-                y : 500
+                y : 300
             }
         }
     },
     scene           : [
-        Bootloader,
         MainScene
     ]
 };
