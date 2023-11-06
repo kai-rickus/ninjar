@@ -11,9 +11,10 @@ export class MainScene extends Scene
     private GRASSLANDBG_KEY = 'grassland';
     private GRASSTILE_KEY   = 'grasstile';
     private PLAYER_KEY      = 'ninjar';
-    private playerIdle;
+    private player;
     private playerRun;
     private cursors;
+    private groundPlatform;
 
     constructor()
     {
@@ -38,7 +39,7 @@ export class MainScene extends Scene
         //     }
         // );
 
-        this.playerIdle = this.load.spritesheet( this.PLAYER_KEY,
+        this.player = this.load.spritesheet( this.PLAYER_KEY,
             'assets/spritesheets/player/idle.png',
             {
                 frameWidth : 120, frameHeight : 80
@@ -46,7 +47,7 @@ export class MainScene extends Scene
         );
 
         this.playerRun = this.load.spritesheet( this.PLAYER_KEY,
-            'assets/spritesheets/player/idle.png',
+            'assets/spritesheets/player/run.png',
             {
                 frameWidth : 120, frameHeight : 80
             }
@@ -67,10 +68,11 @@ export class MainScene extends Scene
 
         // this.image = this.add.image( this.scale.width / 2, this.scale.height / 2, 'phaser3_cli' );
 
-        this.playerIdle = this.createPlayer();
+        this.player = this.createPlayer();
         const platforms = this.createPlatforms();
 
-        this.physics.add.collider( this.playerIdle, platforms );
+        this.physics.add.collider( this.player, platforms );
+        this.physics.add.collider( this.player, this.groundPlatform );
 
         this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -78,14 +80,25 @@ export class MainScene extends Scene
 
     createPlatforms()
     {
-
         const platforms = this.physics.add.staticGroup();
 
-        platforms.create( 400, 568, this.GRASSTILE_KEY ).setScale( 4 ).refreshBody();
+        // platforms.create( 400, 568, this.GRASSTILE_KEY ).setScale( 4 ).refreshBody();
+        //
+        // platforms.create( 600, 400, this.GRASSTILE_KEY );
+        // platforms.create( 50, 250, this.GRASSTILE_KEY );
+        // platforms.create( 750, 220, this.GRASSTILE_KEY );
 
-        platforms.create( 600, 400, this.GRASSTILE_KEY );
-        platforms.create( 50, 250, this.GRASSTILE_KEY );
-        platforms.create( 750, 220, this.GRASSTILE_KEY );
+
+        this.groundPlatform = this.physics.add.staticGroup({
+            key: this.GRASSTILE_KEY,
+            repeat: 150,
+            setXY: { x: 0, y: 568, stepX: 15 }
+        })
+
+
+        // groundPlatform.children.iterate((child) => {
+        //     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8))
+        // })
 
         return platforms;
     }
@@ -135,6 +148,12 @@ export class MainScene extends Scene
             this.playerRun.setVelocityX( 320 );
 
             this.playerRun.anims.play( 'right', true );
+        }
+        else
+        {
+            this.player.setVelocityX(0)
+
+            this.player.anims.play('turn')
         }
 
         if ( this.cursors.up.isDown && this.playerRun.body.touching.down )
