@@ -1,13 +1,7 @@
 {
     "extends"       : "tslint:recommended",
     "rules"         : {
-        "variable-name"               : [
-            true,
-            "check-format",
-            "ban-keywords",
-            "allow-snake-case",
-            "allow-trailing-underscore"
-        ],
+        "variable-name"               : false,
         "one-line"                    : false,
         "import-spacing"              : false,
         "array-type"                  : false,
@@ -25,17 +19,7 @@
         "interface-name"              : false,
         "max-classes-per-file"        : false,
         "member-access"               : false,
-        "member-ordering"             : [
-            true,
-            {
-                "order" : [
-                    "static-field",
-                    "instance-field",
-                    "static-method",
-                    "instance-method"
-                ]
-            }
-        ],
+        "member-ordering"             : false,
         "no-consecutive-blank-lines"  : false,
         "no-empty"                    : false,
         "no-inferrable-types"         : [
@@ -55,7 +39,8 @@
         "ordered-imports"             : false,
         "quotemark"                   : [
             true,
-            "single"
+            "single",
+            "double"
         ],
         "trailing-comma"              : false,
         "new-parens"                  : true,
