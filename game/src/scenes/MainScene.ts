@@ -1,5 +1,6 @@
 import { Scene, Types, Physics } from 'phaser';
 import { Ninjar }                from '../objects/ninjar';
+import { Controls }                from '../objects/controls';
 
 export class MainScene extends Scene
 {
@@ -11,6 +12,7 @@ export class MainScene extends Scene
     private _player: Ninjar;
     private _cursors: Types.Input.Keyboard.CursorKeys;
     private _groundPlatforms: Physics.Arcade.StaticGroup;
+    private _controls: Controls;
 
     constructor()
     {
@@ -24,7 +26,6 @@ export class MainScene extends Scene
         this.load.image( MainScene._SKYBG_KEY, 'assets/images/sky.png' );
         this.load.image( MainScene._MOUNTAINBG_KEY, 'assets/images/mountain.png' );
         this.load.image( MainScene._GRASSLANDBG_KEY, 'assets/images/grassland.png' );
-
         this.load.image( MainScene._GRASSTILE_KEY, 'assets/tiles/green_34.png' );
 
         Ninjar.loadSpriteSheets( this );
@@ -33,8 +34,8 @@ export class MainScene extends Scene
     create(): void
     {
         this.createBackground();
-
         this._player = new Ninjar( 400, 520, this );
+        this._controls = new Controls();
 
         const platforms = this.createPlatforms();
 
@@ -70,17 +71,20 @@ export class MainScene extends Scene
 
     update()
     {
+        /* TODO: Steuerung besser/ effektiver handlen */
+        /* TODO: spriteanimationen in der Ninjar-klasse handlen */
+
+        const ninjarVelocityY = this._player.spriteBody.body.velocity.y;
+
         if ( this._cursors.right.isDown )
         {
             this._player.spriteBody.setVelocityX( 320 );
             this._player.spriteBody.setFlipX( false );
-
             this._player.spriteBody.anims.play( 'right', true );
         }else if ( this._cursors.left.isDown )
         {
             this._player.spriteBody.setVelocityX( -320 );
             this._player.spriteBody.setFlipX( true );
-
             this._player.spriteBody.anims.play( 'left', true );
         }else
         {
@@ -88,16 +92,21 @@ export class MainScene extends Scene
             this._player.spriteBody.anims.play( 'idle' );
         }
 
-        if ( this._cursors.up.isDown && this._player.spriteBody.body.touching.down )
+        if ( this._player.spriteBody.body.touching.down && this._cursors.up.isDown ||
+            this._player.spriteBody.body.touching.down && this._cursors.space.isDown )
         {
             this._player.spriteBody.setVelocityY( -200 );
-            this._player.spriteBody.anims.stop();
             this._player.spriteBody.anims.play( 'jump' );
         }
 
         if ( !this._player.spriteBody.body.touching.down )
         {
             this._player.spriteBody.anims.play( 'jump' );
+        }
+
+        if ( ninjarVelocityY > 25 )
+        {
+            this._player.spriteBody.anims.play( 'fall' );
         }
     }
 }
