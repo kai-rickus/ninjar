@@ -1,6 +1,7 @@
 import * as Phaser   from 'phaser';
 import { Types }     from 'phaser';
 import { MainScene } from '../scenes/MainScene';
+import { Controls }  from '../objects/controls';
 
 export class Ninjar
 {
@@ -15,10 +16,12 @@ export class Ninjar
     private static readonly _FALL_KEY = 'ninjar_fall';
     private static readonly _DASH_KEY = 'ninjar_dash';
 
+    private _controls: Controls;
     private _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody;
 
     public constructor( x: number, y: number, scene: MainScene )
     {
+        this._controls   = new Controls();
         this._spriteBody = scene.physics.add.sprite( x, y, Ninjar._IDLE_KEY );
         this._spriteBody.setBounce( 0 );
         this._spriteBody.setCollideWorldBounds( true );
@@ -94,5 +97,10 @@ export class Ninjar
                 frameWidth : 120, frameHeight : 80
             }
         );
+    }
+
+    static update()
+    {
+        /* TODO: eigene animationen handlen */
     }
 }
