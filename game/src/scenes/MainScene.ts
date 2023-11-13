@@ -1,6 +1,6 @@
-import { Scene, Types, Physics } from 'phaser';
-import { Ninjar }                from '../objects/ninjar';
-import { Controls }                from '../objects/controls';
+import { Scene, Physics } from 'phaser';
+import { Ninjar }         from '../objects/ninjar';
+import { Controls }       from '../objects/controls';
 
 export class MainScene extends Scene
 {
@@ -10,7 +10,6 @@ export class MainScene extends Scene
     private static readonly _GRASSTILE_KEY   = 'grasstile';
 
     private _player: Ninjar;
-    private _cursors: Types.Input.Keyboard.CursorKeys;
     private _groundPlatforms: Physics.Arcade.StaticGroup;
     private _controls: Controls;
 
@@ -28,21 +27,21 @@ export class MainScene extends Scene
         this.load.image( MainScene._GRASSLANDBG_KEY, 'assets/images/grassland.png' );
         this.load.image( MainScene._GRASSTILE_KEY, 'assets/tiles/green_34.png' );
 
+        this._controls = new Controls();
         Ninjar.loadSpriteSheets( this );
     }
 
     create(): void
     {
         this.createBackground();
+
         this._player = new Ninjar( 400, 520, this );
-        this._controls = new Controls();
 
         const platforms = this.createPlatforms();
 
         this.physics.add.collider( this._player.spriteBody, platforms );
         this.physics.add.collider( this._player.spriteBody, this._groundPlatforms );
 
-        this._cursors = this.input.keyboard.createCursorKeys();
     }
 
     createBackground()
@@ -53,7 +52,6 @@ export class MainScene extends Scene
         mountain.setScale( 4 );
         const grassland = this.add.image( this.scale.width / 2, this.scale.height / 2, MainScene._GRASSLANDBG_KEY );
         grassland.setScale( 4 );
-
     }
 
     createPlatforms()
@@ -71,42 +69,63 @@ export class MainScene extends Scene
 
     update()
     {
-        /* TODO: Steuerung besser/ effektiver handlen */
-        /* TODO: spriteanimationen in der Ninjar-klasse handlen */
+        /* TODO: soll beim dashen die jeweilige Höhe behalten */
+
+        // Ninjar.update();
 
         const ninjarVelocityY = this._player.spriteBody.body.velocity.y;
+        const { pressedKeys } = this._controls;
 
-        if ( this._cursors.right.isDown )
+        if ( pressedKeys.right )
         {
-            this._player.spriteBody.setVelocityX( 320 );
+            this._player.spriteBody.setVelocityX( Ninjar.movementSpeedRight );
             this._player.spriteBody.setFlipX( false );
             this._player.spriteBody.anims.play( 'right', true );
-        }else if ( this._cursors.left.isDown )
+
+            if ( pressedKeys.shift )
+            {
+
+                this._player.spriteBody.setX( this._player.spriteBody.x + Ninjar.dashDistanceRight );
+                this._player.spriteBody.anims.play( 'dash' );
+            }
+        }else if ( pressedKeys.left )
         {
-            this._player.spriteBody.setVelocityX( -320 );
+            this._player.spriteBody.setVelocityX( Ninjar.movementSpeedLeft );
             this._player.spriteBody.setFlipX( true );
             this._player.spriteBody.anims.play( 'left', true );
+
+            if ( pressedKeys.shift )
+            {
+                this._player.spriteBody.setX( this._player.spriteBody.x + Ninjar.dashDistanceLeft );
+                this._player.spriteBody.anims.play( 'dash' );
+            }
+        }else if ( pressedKeys.down )
+        {
+            this._player.spriteBody.body.setVelocityX( 0 );
+            this._player.spriteBody.anims.play( 'crouch' );
+
         }else
         {
             this._player.spriteBody.setVelocityX( 0 );
             this._player.spriteBody.anims.play( 'idle' );
         }
 
-        if ( this._player.spriteBody.body.touching.down && this._cursors.up.isDown ||
-            this._player.spriteBody.body.touching.down && this._cursors.space.isDown )
+        if ( this._player.spriteBody.body.touching.down && this._controls.pressedKeys.up && !pressedKeys.shift ||
+            this._player.spriteBody.body.touching.down && this._controls.pressedKeys.spacebar && !pressedKeys.shift )
         {
-            this._player.spriteBody.setVelocityY( -200 );
+            this._player.spriteBody.setVelocityY( Ninjar.jumpHeight );
             this._player.spriteBody.anims.play( 'jump' );
         }
 
-        if ( !this._player.spriteBody.body.touching.down )
+        if ( !this._player.spriteBody.body.touching.down && !pressedKeys.shift )
         {
             this._player.spriteBody.anims.play( 'jump' );
         }
 
-        if ( ninjarVelocityY > 25 )
+        if ( ninjarVelocityY > 50 && !pressedKeys.shift )
         {
             this._player.spriteBody.anims.play( 'fall' );
         }
     }
 }
+
