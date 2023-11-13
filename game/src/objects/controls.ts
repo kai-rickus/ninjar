@@ -5,17 +5,19 @@ export class Controls
         65 : 'left',
         87 : 'up',
         83 : 'down',
-        32 : 'dash',
+        16 : 'shift',
         27 : 'pause',
+        32 : 'spacebar',
     };
 
     public pressedKeys = {
-        right : false,
-        left  : false,
-        up    : false,
-        down  : false,
-        dash  : false,
-        pause : false,
+        right    : false,
+        left     : false,
+        up       : false,
+        down     : false,
+        shift     : false,
+        pause    : false,
+        spacebar : false,
     };
 
     constructor()
@@ -35,5 +37,4 @@ export class Controls
         const key               = Controls._KEY_MAP[ event.keyCode ];
         this.pressedKeys[ key ] = false;
     }
-
 }
