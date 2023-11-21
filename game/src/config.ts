@@ -1,8 +1,9 @@
-import { Bootloader }  from './Bootloader';
-import { MainScene }   from './scenes/MainScene';
-import { AUTO, Scale } from 'phaser';
+import { Bootloader }         from './Bootloader';
+import { MainScene }          from './scenes/MainScene';
+import { SceneTwo }           from './scenes/scene-two';
+import { AUTO, Scale, Types } from 'phaser';
 
-export const CONFIG: any = {
+export const CONFIG: Types.Core.GameConfig = {
     title           : 'NinJar',
     version         : '0.0.1',
     type            : AUTO,
@@ -25,10 +26,12 @@ export const CONFIG: any = {
         arcade  : {
             gravity : {
                 y : 300
-            }
+            },
+            debug   : true,
         }
     },
     scene           : [
-        MainScene
+        MainScene,
+        SceneTwo,
     ]
 };
