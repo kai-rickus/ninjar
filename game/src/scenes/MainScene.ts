@@ -1,4 +1,5 @@
 import { Scene, Physics } from 'phaser';
+import { FinishingFlag }  from '../objects/finishing-flag';
 import { Ninjar }         from '../objects/ninjar';
 import { Controls }       from '../objects/controls';
 
@@ -10,6 +11,7 @@ export class MainScene extends Scene
     private static readonly _GRASSTILE_KEY   = 'grasstile';
 
     private _player: Ninjar;
+    private _finishingFlag: FinishingFlag;
     private _groundPlatforms: Physics.Arcade.StaticGroup;
     private _controls: Controls;
 
@@ -28,20 +30,32 @@ export class MainScene extends Scene
         this.load.image( MainScene._GRASSTILE_KEY, 'assets/tiles/green_34.png' );
 
         this._controls = new Controls();
+
         Ninjar.loadSpriteSheets( this );
+        FinishingFlag.loadSpriteSheet( this );
     }
 
     create(): void
     {
         this.createBackground();
 
-        this._player = new Ninjar( 400, 520, this );
+        this._player        = new Ninjar( 400, 520, this );
+        this._finishingFlag = new FinishingFlag( 800, 520, this );
 
         const platforms = this.createPlatforms();
 
         this.physics.add.collider( this._player.spriteBody, platforms );
         this.physics.add.collider( this._player.spriteBody, this._groundPlatforms );
+        this.physics.add.collider( this._finishingFlag.spriteBody, this._groundPlatforms );
 
+        this.physics.add.collider( this._player.spriteBody, this._finishingFlag.spriteBody, this.finishLevel );
+
+    }
+
+    finishLevel()
+    {
+        /* TODO: add leveltransition */
+        debugger
     }
 
     createBackground()
@@ -70,8 +84,9 @@ export class MainScene extends Scene
     update()
     {
         /* TODO: soll beim dashen die jeweilige Höhe behalten */
+        /* TODO: Beschleunigung einbauen */
 
-        // Ninjar.update();
+        Ninjar.update();
 
         const ninjarVelocityY = this._player.spriteBody.body.velocity.y;
         const { pressedKeys } = this._controls;
