@@ -1,40 +1,22 @@
-export class Controls
+import { Input } from 'phaser';
+
+export interface WASDControls
 {
-    private static readonly _KEY_MAP = {
-        68 : 'right',
-        65 : 'left',
-        87 : 'up',
-        83 : 'down',
-        16 : 'shift',
-        27 : 'pause',
-        32 : 'spacebar',
-    };
-
-    public pressedKeys = {
-        right    : false,
-        left     : false,
-        up       : false,
-        down     : false,
-        shift     : false,
-        pause    : false,
-        spacebar : false,
-    };
-
-    constructor()
-    {
-        window.addEventListener( 'keydown', this._keydown.bind( this ) );
-        window.addEventListener( 'keyup', this._keyup.bind( this ) );
-    }
-
-    private _keydown( event )
-    {
-        const key               = Controls._KEY_MAP[ event.keyCode ];
-        this.pressedKeys[ key ] = true;
-    }
-
-    private _keyup( event )
-    {
-        const key               = Controls._KEY_MAP[ event.keyCode ];
-        this.pressedKeys[ key ] = false;
-    }
+    w: Input.Keyboard.Key,
+    a: Input.Keyboard.Key,
+    s: Input.Keyboard.Key,
+    d: Input.Keyboard.Key,
+    space: Input.Keyboard.Key,
+    shift: Input.Keyboard.Key,
+    escape: Input.Keyboard.Key,
 }
+
+export const WASD_CONTROLS = {
+    w      : Input.Keyboard.KeyCodes.W,
+    a      : Input.Keyboard.KeyCodes.A,
+    s      : Input.Keyboard.KeyCodes.S,
+    d      : Input.Keyboard.KeyCodes.D,
+    space  : Input.Keyboard.KeyCodes.SPACE,
+    shift  : Input.Keyboard.KeyCodes.SHIFT,
+    escape : Input.Keyboard.KeyCodes.ESC,
+};

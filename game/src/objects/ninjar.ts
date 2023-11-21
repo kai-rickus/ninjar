@@ -1,6 +1,6 @@
-import * as Phaser   from 'phaser';
-import { Types }     from 'phaser';
-import { MainScene } from '../scenes/MainScene';
+import * as Phaser      from 'phaser';
+import { Scene, Types } from 'phaser';
+import { WASDControls } from './controls';
 
 export class Ninjar
 {
@@ -12,7 +12,8 @@ export class Ninjar
     /* TODO: dashrichtung von bewegungsvector abhängig machen (Dann auch solo-dash ohne bewegung möglich) */
     /* TODO: dashdauer erstellen */
 
-    public static readonly dashDistanceRight  = 10;
+    /* TODO: in KOnstANTEN UMSCHREIBEN */
+    public static readonly DASH_VELOCITY      = 1500;
     public static readonly dashDistanceLeft   = -10;
     public static readonly movementSpeedRight = 320;
     public static readonly movementSpeedLeft  = -320;
@@ -27,7 +28,7 @@ export class Ninjar
 
     private readonly _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody;
 
-    public constructor( x: number, y: number, scene: MainScene )
+    public constructor( x: number, y: number, scene: Scene, private _controls: WASDControls )
     {
         this._spriteBody = scene.physics.add.sprite( x, y, Ninjar._IDLE_KEY );
         this._spriteBody.setBounce( 0 );
@@ -39,7 +40,6 @@ export class Ninjar
             repeat    : -1,
             frameRate : 20
         } );
-
         scene.anims.create( {
             key       : 'right',
             frames    : scene.anims.generateFrameNumbers( Ninjar._RUN_KEY, { start : 0, end : 9 } ),
@@ -78,112 +78,103 @@ export class Ninjar
         } );
     }
 
-    public static loadSpriteSheets( scene: MainScene )
+    public static loadSpriteSheets( scene: Scene )
     {
+        scene.load.setPath( 'assets/spritesheets/player/' );
+
         scene.load.spritesheet( Ninjar._RUN_KEY,
-            'assets/spritesheets/player/run.png',
+            'run.png',
             {
                 frameWidth : 120, frameHeight : 80
             }
         );
         scene.load.spritesheet( Ninjar._IDLE_KEY,
-            'assets/spritesheets/player/idle.png',
+            'idle.png',
             {
                 frameWidth : 120, frameHeight : 80
             }
         );
         scene.load.spritesheet( Ninjar._JUMP_KEY,
-            'assets/spritesheets/player/jump.png',
+            'jump.png',
             {
                 frameWidth : 120, frameHeight : 80
             }
         );
         scene.load.spritesheet( Ninjar._FALL_KEY,
-            'assets/spritesheets/player/fall.png',
+            'fall.png',
             {
                 frameWidth : 120, frameHeight : 80
             }
         );
         scene.load.spritesheet( Ninjar._DASH_KEY,
-            'assets/spritesheets/player/dash.png',
+            'dash.png',
             {
                 frameWidth : 120, frameHeight : 80
             }
         );
         scene.load.spritesheet( Ninjar._CROUCH_KEY,
-            'assets/spritesheets/player/crouch.png',
+            'crouch.png',
             {
                 frameWidth : 120, frameHeight : 80
             }
         );
+
+        scene.load.setPath();
     }
 
-    static update()
+    public update()
     {
-        /* TODO: eigene animationen handlen */
-        // const ninjarVelocityY        = this._player.spriteBody.body.velocity.y;
-        // const dashKeyPressedDuration = this._cursors.shift.getDuration();
-        // const { pressedKeys }        = _controls;
+        const ninjarVelocityY              = this.spriteBody.body.velocity.y;
+        const { w, a, s, d, shift, space } = this._controls;
 
-        //     if ( pressedKeys.right )
-        //     {
-        //         this._player.spriteBody.setVelocityX( Ninjar.movementSpeedRight );
-        //         this._player.spriteBody.setFlipX( false );
-        //         this._player.spriteBody.anims.play( 'right', true );
-        //
-        //         if ( this._cursors.shift.isDown )
-        //         {
-        //             if ( dashKeyPressedDuration > Ninjar.dashDuration )
-        //             {
-        //                 return;
-        //             }
-        //
-        //             this._player.spriteBody.setX( this._player.spriteBody.x + Ninjar.dashDistanceRight );
-        //             this._player.spriteBody.anims.play( 'dash' );
-        //         }
-        //     }else if ( pressedKeys.left )
-        //     {
-        //         this._player.spriteBody.setVelocityX( Ninjar.movementSpeedLeft );
-        //         this._player.spriteBody.setFlipX( true );
-        //         this._player.spriteBody.anims.play( 'left', true );
-        //
-        //         if ( this._cursors.shift.isDown )
-        //         {
-        //             if ( dashKeyPressedDuration > Ninjar.dashDuration )
-        //             {
-        //                 return;
-        //             }
-        //
-        //             this._player.spriteBody.setX( this._player.spriteBody.x + Ninjar.dashDistanceLeft );
-        //             this._player.spriteBody.anims.play( 'dash' );
-        //         }
-        //     }else if ( pressedKeys.down )
-        //     {
-        //         this._player.spriteBody.body.setVelocityX( 0 );
-        //         this._player.spriteBody.anims.play( 'crouch' );
-        //
-        //     }else
-        //     {
-        //         this._player.spriteBody.setVelocityX( 0 );
-        //         this._player.spriteBody.anims.play( 'idle' );
-        //     }
-        //
-        //     if ( this._player.spriteBody.body.touching.down && this._controls.pressedKeys.up ||
-        //         this._player.spriteBody.body.touching.down && this._controls.pressedKeys.spacebar )
-        //     {
-        //         this._player.spriteBody.setVelocityY( Ninjar.jumpHeight );
-        //         this._player.spriteBody.anims.play( 'jump' );
-        //     }
-        //
-        //     if ( !this._player.spriteBody.body.touching.down )
-        //     {
-        //         this._player.spriteBody.anims.play( 'jump' );
-        //     }
-        //
-        //     if ( ninjarVelocityY > 50 )
-        //     {
-        //         this._player.spriteBody.anims.play( 'fall' );
-        //     }
-        // }
+        if ( d.isDown )
+        {
+            this.spriteBody.setVelocityX( Ninjar.movementSpeedRight );
+            this.spriteBody.setFlipX( false );
+            this.spriteBody.anims.play( 'right', true );
+
+            if ( shift.isDown)
+            {
+                this.spriteBody.setVelocityX( Ninjar.DASH_VELOCITY );
+                this.spriteBody.anims.play( 'dash' );
+            }
+        }else if ( a.isDown )
+        {
+            this.spriteBody.setVelocityX( Ninjar.movementSpeedLeft );
+            this.spriteBody.setFlipX( true );
+            this.spriteBody.anims.play( 'left', true );
+
+            if ( shift.isDown )
+            {
+                this.spriteBody.setVelocityX( -Ninjar.DASH_VELOCITY );
+                this.spriteBody.anims.play( 'dash' );
+            }
+        }else if ( s.isDown )
+        {
+            this.spriteBody.body.setVelocityX( 0 );
+            this.spriteBody.anims.play( 'crouch' );
+
+        }else
+        {
+            this.spriteBody.setVelocityX( 0 );
+            this.spriteBody.anims.play( 'idle' );
+        }
+
+        if ( this.spriteBody.body.touching.down && w.isDown && !shift.isDown ||
+            this.spriteBody.body.touching.down && space.isDown && !shift.isDown )
+        {
+            this.spriteBody.setVelocityY( Ninjar.jumpHeight );
+            this.spriteBody.anims.play( 'jump' );
+        }
+
+        if ( !this.spriteBody.body.touching.down && !shift.isDown )
+        {
+            this.spriteBody.anims.play( 'jump' );
+        }
+
+        if ( ninjarVelocityY > 50 && !shift.isDown )
+        {
+            this.spriteBody.anims.play( 'fall' );
+        }
     }
 }
