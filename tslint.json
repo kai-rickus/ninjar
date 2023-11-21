@@ -42,6 +42,7 @@
             "single",
             "double"
         ],
+        "eofline"                     : false,
         "trailing-comma"              : false,
         "new-parens"                  : true,
         "no-arg"                      : true,
