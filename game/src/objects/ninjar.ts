@@ -1,7 +1,6 @@
 import * as Phaser   from 'phaser';
 import { Types }     from 'phaser';
 import { MainScene } from '../scenes/MainScene';
-import { Controls }  from '../objects/controls';
 
 export class Ninjar
 {
@@ -26,15 +25,13 @@ export class Ninjar
     private static readonly _DASH_KEY   = 'ninjar_dash';
     private static readonly _CROUCH_KEY = 'ninjar_crouch';
 
-    private _controls: Controls;
-    private _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody;
+    private readonly _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody;
 
     public constructor( x: number, y: number, scene: MainScene )
     {
         this._spriteBody = scene.physics.add.sprite( x, y, Ninjar._IDLE_KEY );
         this._spriteBody.setBounce( 0 );
         this._spriteBody.setCollideWorldBounds( true );
-        this._controls = new Controls();
 
         scene.anims.create( {
             key       : 'left',
