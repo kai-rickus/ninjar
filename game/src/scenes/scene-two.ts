@@ -25,7 +25,7 @@ export class SceneTwo extends Scene
     preload()
     {
 
-        this.load.image( SceneTwo._BACKGROUND_KEY, 'assets/images/pixel-background.jpg' );
+        this.load.image( SceneTwo._BACKGROUND_KEY, 'assets/images/backgrounds/kitchen-background.png' );
 
         this._controls = this.input.keyboard.addKeys( WASD_CONTROLS ) as WASDControls;
 
@@ -35,13 +35,11 @@ export class SceneTwo extends Scene
 
     create(): void
     {
-        console.log( this );
         this.createBackground();
 
         this._player        = new Ninjar( 400, this._SpawnY, this, this._controls );
         this._finishingFlag = new FinishingFlag( 800, this._SpawnY, this );
 
-        console.log( this._player );
         this.addCollisions();
 
     }
@@ -59,13 +57,13 @@ export class SceneTwo extends Scene
 
     finishLevel()
     {
-        console.log( 'scene two: goal touched' );
+
     }
 
     createBackground()
     {
         const background = this.add.image( this.scale.width / 2, this.scale.height / 2, SceneTwo._BACKGROUND_KEY );
-        background.setScale( 0.5, 0.5 );
+        background.setScale( 1.5, 1 );
     }
 
     createPlatforms()
@@ -83,9 +81,6 @@ export class SceneTwo extends Scene
 
     update()
     {
-        /* TODO: soll beim dashen die jeweilige Höhe behalten */
-        /* TODO: Beschleunigung einbauen */
-
         this._player.update();
     }
 }
