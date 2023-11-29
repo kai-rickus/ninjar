@@ -12,27 +12,27 @@ export class Ninjar
     /* TODO: dashrichtung von bewegungsvector abhängig machen (Dann auch solo-dash ohne bewegung möglich) */
     /* TODO: dashdauer erstellen */
 
-    /* TODO: in KOnstANTEN UMSCHREIBEN */
-    public static readonly DASH_VELOCITY      = 1500;
-    public static readonly dashDistanceLeft   = -10;
-    public static readonly movementSpeedRight = 320;
-    public static readonly movementSpeedLeft  = -320;
-    public static readonly jumpHeight         = -200;
-
-    private static readonly _RUN_KEY    = 'ninjar_run';
-    private static readonly _IDLE_KEY   = 'ninjar_idle';
-    private static readonly _JUMP_KEY   = 'ninjar_jump';
-    private static readonly _FALL_KEY   = 'ninjar_fall';
-    private static readonly _DASH_KEY   = 'ninjar_dash';
-    private static readonly _CROUCH_KEY = 'ninjar_crouch';
+    public static readonly DASH_VELOCITY  = 1500;
+    public static readonly MOVEMENT_SPEED = 320;
+    public static readonly JUMP_HEIGHT    = -200;
+    private static readonly _RUN_KEY      = 'ninjar_run';
+    private static readonly _IDLE_KEY     = 'ninjar_idle';
+    private static readonly _JUMP_KEY     = 'ninjar_jump';
+    private static readonly _FALL_KEY     = 'ninjar_fall';
+    private static readonly _DASH_KEY     = 'ninjar_dash';
+    private static readonly _CROUCH_KEY   = 'ninjar_crouch';
 
     private readonly _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody;
+    private _dashDirection = 'right';
+    private _allowedToDash = true;
 
     public constructor( x: number, y: number, scene: Scene, private _controls: WASDControls )
     {
         this._spriteBody = scene.physics.add.sprite( x, y, Ninjar._IDLE_KEY );
         this._spriteBody.setBounce( 0 );
         this._spriteBody.setCollideWorldBounds( true );
+
+        this._spriteBody.setSize( 40, 80 );
 
         scene.anims.create( {
             key       : 'left',
@@ -129,26 +129,18 @@ export class Ninjar
 
         if ( d.isDown )
         {
-            this.spriteBody.setVelocityX( Ninjar.movementSpeedRight );
+            this._dashDirection = 'right';
+            this.spriteBody.setVelocityX( Ninjar.MOVEMENT_SPEED );
             this.spriteBody.setFlipX( false );
             this.spriteBody.anims.play( 'right', true );
 
-            if ( shift.isDown)
-            {
-                this.spriteBody.setVelocityX( Ninjar.DASH_VELOCITY );
-                this.spriteBody.anims.play( 'dash' );
-            }
         }else if ( a.isDown )
         {
-            this.spriteBody.setVelocityX( Ninjar.movementSpeedLeft );
+            this._dashDirection = 'left';
+            this.spriteBody.setVelocityX( -Ninjar.MOVEMENT_SPEED );
             this.spriteBody.setFlipX( true );
             this.spriteBody.anims.play( 'left', true );
 
-            if ( shift.isDown )
-            {
-                this.spriteBody.setVelocityX( -Ninjar.DASH_VELOCITY );
-                this.spriteBody.anims.play( 'dash' );
-            }
         }else if ( s.isDown )
         {
             this.spriteBody.body.setVelocityX( 0 );
@@ -163,7 +155,7 @@ export class Ninjar
         if ( this.spriteBody.body.touching.down && w.isDown && !shift.isDown ||
             this.spriteBody.body.touching.down && space.isDown && !shift.isDown )
         {
-            this.spriteBody.setVelocityY( Ninjar.jumpHeight );
+            this.spriteBody.setVelocityY( Ninjar.JUMP_HEIGHT );
             this.spriteBody.anims.play( 'jump' );
         }
 
@@ -175,6 +167,37 @@ export class Ninjar
         if ( ninjarVelocityY > 50 && !shift.isDown )
         {
             this.spriteBody.anims.play( 'fall' );
+        }
+        if ( shift.isDown )
+        {
+            this.handleDash( this._dashDirection );
+        }
+    }
+
+    handleDash( dashDirection )
+    {
+        /* TODO: dash-cooldown */
+        console.log( this.spriteBody.body.touching.none );
+        const dashDuration = this._controls.shift.getDuration();
+
+        if ( dashDuration >= 300 )
+        {
+            return;
+        }
+        if ( !this._allowedToDash )
+        {
+            return;
+        }
+
+        if ( dashDirection === 'right' )
+        {
+            this.spriteBody.setVelocityX( Ninjar.DASH_VELOCITY );
+            this.spriteBody.anims.play( 'dash' );
+
+        }else if ( dashDirection === 'left' )
+        {
+            this.spriteBody.setVelocityX( -Ninjar.DASH_VELOCITY );
+            this.spriteBody.anims.play( 'dash' );
         }
     }
 }
