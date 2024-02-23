@@ -23,11 +23,13 @@ export class Ninjar
     private static readonly _FALL_KEY     = "ninjar_fall"
     private static readonly _DASH_KEY     = "ninjar_dash"
     private static readonly _CROUCH_KEY   = "ninjar_crouch"
+    private static readonly _JUMP_CUE     = "jump_cue"
 
     private readonly _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody
     private _dashDirection: DashDirection = "right"
     private _allowedToDash                = true
     private _states                       = new NinjarStateMachine()
+    private _jumpCue
 
     public constructor( x: number, y: number, private _scene: Scene, private _controls: WASDControls )
     {
@@ -127,6 +129,25 @@ export class Ninjar
         scene.load.setPath()
     }
 
+    public static loadAudioCues( scene: Scene )
+    {
+        scene.load.audio( "jump", "assets/audio/jump.mp3" )
+        scene.load.audio( "dash", "assets/audio/dash.mp3" )
+    }
+
+    /* TODO: alle audio cues funktionen in eine Funktionen vereinen */
+
+    playJumpCue( scene: Scene )
+    {
+        const music = scene.sound.add( "jump" ) // 'theme' should match the key used in preload
+        music.play()
+    }
+    playDashCue( scene: Scene )
+    {
+        const music = scene.sound.add( "dash" ) // 'theme' should match the key used in preload
+        music.play()
+    }
+
     public update()
     {
         const ninjarVelocityY              = this.spriteBody.body.velocity.y
@@ -153,7 +174,6 @@ export class Ninjar
         {
             this.spriteBody.body.setVelocityX( 0 )
             this.spriteBody.anims.play( "crouch" )
-
         }
         else
         {
@@ -169,6 +189,8 @@ export class Ninjar
         {
             this.spriteBody.setVelocityY( Ninjar.JUMP_HEIGHT )
             this.spriteBody.anims.play( "jump" )
+
+            this.playJumpCue(this._scene)
         }
 
         if ( !this.spriteBody.body.touching.down && !shift.isDown )
@@ -199,6 +221,8 @@ export class Ninjar
     {
         this._states.activateState( "dashing" )
         this._allowedToDash = false
+
+        this.playDashCue(this._scene)
 
         const distance               = 200
         const { x : oldX, y : oldY } = this.spriteBody

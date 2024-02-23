@@ -31,6 +31,7 @@ export class SceneTwo extends Scene
 
         FinishingFlag.loadSpriteSheet( this );
         Ninjar.loadSpriteSheets( this );
+        Ninjar.loadAudioCues(this)
     }
 
     create(): void

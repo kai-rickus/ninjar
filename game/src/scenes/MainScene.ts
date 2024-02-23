@@ -16,6 +16,7 @@ export class MainScene extends Scene
     private _controls: WASDControls;
     private _PlatformSpawnY = 560;
     private _SpawnY         = this._PlatformSpawnY - 50;
+    private jump_cue;
 
     constructor()
     {
@@ -28,16 +29,21 @@ export class MainScene extends Scene
     {
         this.load.image( MainScene._BACKGROUND_KEY, 'assets/images/backgrounds/kitchen-background-straight.png' );
         this.load.image( MainScene._GRASSTILE_KEY, 'assets/tiles/green_34.png' );
+        this.load.audio( "scene_1", "assets/audio/themes/scene_1.mp3" )
 
         this._controls = this.input.keyboard.addKeys( WASD_CONTROLS ) as WASDControls;
 
         Ninjar.loadSpriteSheets( this );
         FinishingFlag.loadSpriteSheet( this );
+        Ninjar.loadAudioCues(this)
     }
 
     create(): void
     {
         this.createBackground();
+
+        const levelTheme = this.sound.add( "scene_1" ) // 'theme' should match the key used in preload
+        levelTheme.play()
 
         this._player        = new Ninjar( 400, this._SpawnY, this, this._controls );
         this._finishingFlag = new FinishingFlag( 800, this._SpawnY, this );
