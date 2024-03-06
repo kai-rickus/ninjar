@@ -1,4 +1,4 @@
-import { MainScene }    from '../scenes/MainScene';
+import { SceneOne }     from '../scenes/scene-one';
 import { Scene, Types } from 'phaser';
 
 export class FinishingFlag
