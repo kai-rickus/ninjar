@@ -137,15 +137,22 @@ export class Ninjar
 
     /* TODO: alle audio cues funktionen in eine Funktionen vereinen */
 
-    playJumpCue( scene: Scene )
+    handleAudioCues( scene: Scene, Cue: string )
     {
-        const music = scene.sound.add( "jump" ) // 'theme' should match the key used in preload
-        music.play()
-    }
-    playDashCue( scene: Scene )
-    {
-        const music = scene.sound.add( "dash" ) // 'theme' should match the key used in preload
-        music.play()
+
+        const jumpCue = scene.sound.add( "jump" )
+        const dashCue = scene.sound.add( "dash" )
+
+        if ( Cue === "jumpCue" )
+        {
+            jumpCue.play()
+            jumpCue.setVolume( 0.2 )
+        }
+        else if ( Cue === "dashCue" )
+        {
+            dashCue.play()
+            dashCue.setVolume( 0.1 )
+        }
     }
 
     public update()
@@ -190,7 +197,7 @@ export class Ninjar
             this.spriteBody.setVelocityY( Ninjar.JUMP_HEIGHT )
             this.spriteBody.anims.play( "jump" )
 
-            this.playJumpCue(this._scene)
+            this.handleAudioCues( this._scene, "jumpCue" )
         }
 
         if ( !this.spriteBody.body.touching.down && !shift.isDown )
@@ -222,7 +229,9 @@ export class Ninjar
         this._states.activateState( "dashing" )
         this._allowedToDash = false
 
-        this.playDashCue(this._scene)
+        this.handleAudioCues( this._scene, "dashCue" )
+
+        // this.playDashCue( this._scene, dashCue )
 
         const distance               = 200
         const { x : oldX, y : oldY } = this.spriteBody
