@@ -38,6 +38,7 @@
             true,
             "as-needed"
         ],
+        "forin" : false,
         "object-literal-sort-keys"    : false,
         "ordered-imports"             : false,
         "quotemark"                   : [
