@@ -5,18 +5,17 @@ import { WASD_CONTROLS, WASDControls } from "../objects/controls"
 
 export class SceneOne extends Scene
 {
-    private static readonly _SKYBG_KEY      = "sky"
-    private static readonly _MOUNTAINBG_KEY = "mountain"
     private static readonly _BACKGROUND_KEY = "grassland"
     private static readonly _GRASSTILE_KEY  = "grasstile"
 
     private _player: Ninjar
     private _finishingFlag: FinishingFlag
-    private _groundPlatforms: Physics.Arcade.StaticGroup
     private _controls: WASDControls
     private _PlatformSpawnY = 560
     private _SpawnY         = this._PlatformSpawnY - 50
     private jump_cue
+    private tilesX          = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ]
+    private _platformSpawnX = 0
 
     constructor()
     {
@@ -65,8 +64,8 @@ export class SceneOne extends Scene
         const platforms = this.createPlatforms()
 
         this.physics.add.collider( this._player.spriteBody, platforms )
-        this.physics.add.collider( this._player.spriteBody, this._groundPlatforms )
-        this.physics.add.collider( this._finishingFlag.spriteBody, this._groundPlatforms )
+        this.physics.add.collider( this._player.spriteBody, platforms )
+        this.physics.add.collider( this._finishingFlag.spriteBody, platforms )
     }
 
     finishLevel( context, )
@@ -88,12 +87,25 @@ export class SceneOne extends Scene
     {
         const platforms = this.physics.add.staticGroup()
 
-        this._groundPlatforms = this.physics.add.staticGroup( {
-                key    : SceneOne._GRASSTILE_KEY,
-                repeat : 76,
-                setXY  : { x : 100, y : this._PlatformSpawnY, stepX : 15 }
-            }
-        )
+        // const platforms = this.physics.add.staticGroup( {
+        //         key    : SceneOne._GRASSTILE_KEY,
+        //         repeat : 76,
+        //         setXY  : { x : 100, y : this._PlatformSpawnY, stepX : 15 }
+        //     }
+        // )
+        // TODO: erzeugen der tiles verbessern
+
+        for ( const tilex in this.tilesX )
+        {
+            platforms.create( this._platformSpawnX, this._PlatformSpawnY, SceneOne._GRASSTILE_KEY ).setScale( 4, 1 ).refreshBody()
+            this._platformSpawnX = this._platformSpawnX + 65
+        }
+
+        platforms.create( 500, 550, SceneOne._GRASSTILE_KEY ).setScale( 3,2).refreshBody()
+        // platforms.create( 150, 500, SceneOne._GRASSTILE_KEY, )
+
+        // platforms.create( 200, 500, SceneOne._GRASSTILE_KEY ).setScale(2, 3).refreshBody()
+        // platforms.create( 300, 600, SceneOne._GRASSTILE_KEY )
 
         return platforms
     }

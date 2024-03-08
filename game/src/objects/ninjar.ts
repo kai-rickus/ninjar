@@ -4,15 +4,14 @@ import { NinjarStateMachine }  from "./ninjar-state-machine"
 
 type DashDirection = "left" | "right"
 
+
+// TODO: Hitbox des Spielers an eigentliche Größe anpassen
 export class Ninjar
 {
     get spriteBody(): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
     {
         return this._spriteBody
     }
-
-    /* TODO: dashrichtung von bewegungsvector abhängig machen (Dann auch solo-dash ohne bewegung möglich) */
-    /* TODO: dashdauer erstellen */
 
     public static readonly DASH_VELOCITY  = 1500
     public static readonly MOVEMENT_SPEED = 320
@@ -134,8 +133,6 @@ export class Ninjar
         scene.load.audio( "jump", "assets/audio/jump.mp3" )
         scene.load.audio( "dash", "assets/audio/dash.mp3" )
     }
-
-    /* TODO: alle audio cues funktionen in eine Funktionen vereinen */
 
     handleAudioCues( scene: Scene, Cue: string )
     {
