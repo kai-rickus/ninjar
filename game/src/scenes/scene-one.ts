@@ -5,16 +5,16 @@ import { WASD_CONTROLS, WASDControls } from "../objects/controls"
 
 export class SceneOne extends Scene
 {
-    private static readonly _BACKGROUND_KEY = "grassland"
-    private static readonly _GRASSTILE_KEY  = "grasstile"
+    private static readonly _BACKGROUND_KEY    = "grassland"
+    private static readonly _DIRT_TILE_ONE_KEY = "grasstile"
+    private static readonly _WARNING_SIGN_KEY  = "warning"
 
     private _player: Ninjar
     private _finishingFlag: FinishingFlag
     private _controls: WASDControls
     private _PlatformSpawnY = 560
-    private _SpawnY         = this._PlatformSpawnY - 50
-    private jump_cue
-    private tilesX          = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ]
+    private _SpawnY         = this._PlatformSpawnY - 55
+    private tilesX          = [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
     private _platformSpawnX = 0
 
     constructor()
@@ -27,7 +27,8 @@ export class SceneOne extends Scene
     preload()
     {
         this.load.image( SceneOne._BACKGROUND_KEY, "assets/images/backgrounds/kitchen-background-straight.png" )
-        this.load.image( SceneOne._GRASSTILE_KEY, "assets/tiles/green_34.png" )
+        this.load.image( SceneOne._DIRT_TILE_ONE_KEY, "assets/tiles/dirt_1.png" )
+        this.load.image( SceneOne._WARNING_SIGN_KEY, "assets/signs/warning.png" )
         this.load.audio( "scene_1", "assets/audio/themes/scene_1.mp3" )
 
         this._controls = this.input.keyboard.addKeys( WASD_CONTROLS ) as WASDControls
@@ -44,11 +45,11 @@ export class SceneOne extends Scene
         // this.handleLevelTheme()
 
         this._player        = new Ninjar( 400, this._SpawnY, this, this._controls )
-        this._finishingFlag = new FinishingFlag( 800, this._SpawnY, this )
+        this._finishingFlag = new FinishingFlag( 1200, this._SpawnY - 50, this )
 
         this.addCollisions()
 
-        // this.physics.add.overlap( this._player.spriteBody, this._finishingFlag.spriteBody, this.finishLevel, undefined, this )
+        this.physics.add.overlap( this._player.spriteBody, this._finishingFlag.spriteBody, this.finishLevel, undefined, this )
 
     }
 
@@ -62,8 +63,8 @@ export class SceneOne extends Scene
     addCollisions()
     {
         const platforms = this.createPlatforms()
+        const signs = this.createSigns()
 
-        this.physics.add.collider( this._player.spriteBody, platforms )
         this.physics.add.collider( this._player.spriteBody, platforms )
         this.physics.add.collider( this._finishingFlag.spriteBody, platforms )
     }
@@ -88,7 +89,7 @@ export class SceneOne extends Scene
         const platforms = this.physics.add.staticGroup()
 
         // const platforms = this.physics.add.staticGroup( {
-        //         key    : SceneOne._GRASSTILE_KEY,
+        //         key    : SceneOne._DIRT_TILE_ONE_KEY,
         //         repeat : 76,
         //         setXY  : { x : 100, y : this._PlatformSpawnY, stepX : 15 }
         //     }
@@ -97,17 +98,31 @@ export class SceneOne extends Scene
 
         for ( const tilex in this.tilesX )
         {
-            platforms.create( this._platformSpawnX, this._PlatformSpawnY, SceneOne._GRASSTILE_KEY ).setScale( 4, 1 ).refreshBody()
-            this._platformSpawnX = this._platformSpawnX + 65
+            console.log( this._platformSpawnX )
+            platforms.create( this._platformSpawnX, this._PlatformSpawnY, SceneOne._DIRT_TILE_ONE_KEY )
+            this._platformSpawnX = this._platformSpawnX + 32
         }
 
-        platforms.create( 500, 550, SceneOne._GRASSTILE_KEY ).setScale( 3,2).refreshBody()
-        // platforms.create( 150, 500, SceneOne._GRASSTILE_KEY, )
+        this._platformSpawnX = 800
+        for ( const tilex in this.tilesX )
+        {
+            console.log( this._platformSpawnX )
+            platforms.create( this._platformSpawnX, this._PlatformSpawnY - 60, SceneOne._DIRT_TILE_ONE_KEY )
+            this._platformSpawnX = this._platformSpawnX + 32
+        }
 
-        // platforms.create( 200, 500, SceneOne._GRASSTILE_KEY ).setScale(2, 3).refreshBody()
-        // platforms.create( 300, 600, SceneOne._GRASSTILE_KEY )
+        // platforms.create( 200, 500, SceneOne._DIRT_TILE_ONE_KEY ).setScale(2, 3).refreshBody()
+        // platforms.create( 300, 600, SceneOne._DIRT_TILE_ONE_KEY )
 
         return platforms
+    }
+
+    createSigns()
+    {
+        const signs = this.physics.add.staticGroup()
+
+        signs.create( 610, this._PlatformSpawnY - 30, SceneOne._WARNING_SIGN_KEY, ).setScale( 1.5 )
+
     }
 
     update()
