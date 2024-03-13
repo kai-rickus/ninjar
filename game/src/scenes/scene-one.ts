@@ -63,7 +63,7 @@ export class SceneOne extends Scene
     addCollisions()
     {
         const platforms = this.createPlatforms()
-        const signs = this.createSigns()
+        const signs     = this.createSigns()
 
         this.physics.add.collider( this._player.spriteBody, platforms )
         this.physics.add.collider( this._finishingFlag.spriteBody, platforms )
@@ -83,7 +83,7 @@ export class SceneOne extends Scene
         grassland.setScale( 1.4, 1 )
     }
 
-    // TODO: Level designen - Löcher und Klippen einbauen
+    // TODO: das Aray mit der Anzahl der Blöcke verbessern. Kein hardgecodetes Array
     createPlatforms()
     {
         const platforms = this.physics.add.staticGroup()
@@ -94,7 +94,6 @@ export class SceneOne extends Scene
         //         setXY  : { x : 100, y : this._PlatformSpawnY, stepX : 15 }
         //     }
         // )
-        // TODO: erzeugen der tiles verbessern
 
         for ( const tilex in this.tilesX )
         {
@@ -122,7 +121,6 @@ export class SceneOne extends Scene
         const signs = this.physics.add.staticGroup()
 
         signs.create( 610, this._PlatformSpawnY - 30, SceneOne._WARNING_SIGN_KEY, ).setScale( 1.5 )
-
     }
 
     update()

@@ -4,7 +4,6 @@ import { NinjarStateMachine }  from "./ninjar-state-machine"
 
 type DashDirection = "left" | "right"
 
-
 // TODO: Hitbox des Spielers an eigentliche Größe anpassen
 export class Ninjar
 {
@@ -13,16 +12,20 @@ export class Ninjar
         return this._spriteBody
     }
 
-    public static readonly DASH_VELOCITY  = 1500
-    public static readonly MOVEMENT_SPEED = 320
-    public static readonly JUMP_HEIGHT    = -200
-    private static readonly _RUN_KEY      = "ninjar_run"
-    private static readonly _IDLE_KEY     = "ninjar_idle"
-    private static readonly _JUMP_KEY     = "ninjar_jump"
-    private static readonly _FALL_KEY     = "ninjar_fall"
-    private static readonly _DASH_KEY     = "ninjar_dash"
-    private static readonly _CROUCH_KEY   = "ninjar_crouch"
-    private static readonly _JUMP_CUE     = "jump_cue"
+    public static readonly DASH_VELOCITY                    = 1500
+    public static readonly MOVEMENT_SPEED                   = 320
+    public static readonly JUMP_HEIGHT                      = -200
+    private static readonly _RUN_KEY                        = "ninjar_run"
+    private static readonly _IDLE_KEY                       = "ninjar_idle"
+    private static readonly _JUMP_KEY                       = "ninjar_jump"
+    private static readonly _FALL_KEY                       = "ninjar_fall"
+    private static readonly _DASH_KEY                       = "ninjar_dash"
+    private static readonly _CROUCH_KEY                     = "ninjar_crouch"
+    private static readonly _JUMP_CUE                       = "jump_cue"
+    private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_X = 40
+    private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_Y = 40
+    private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_X  = 50
+    private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_Y  = 40
 
     private readonly _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody
     private _dashDirection: DashDirection = "right"
@@ -36,7 +39,9 @@ export class Ninjar
         this._spriteBody.setBounce( 0 )
         this._spriteBody.setCollideWorldBounds( true )
 
-        this._spriteBody.setSize( 40, 80 )
+        this._spriteBody.setSize( 30, 40 )
+
+        this._spriteBody.body.setOffset( 40, 40 )
 
         _scene.anims.create( {
             key       : "left",
@@ -160,6 +165,8 @@ export class Ninjar
 
         if ( d.isDown && !this._states.isActive( "dashing" ) )
         {
+            this._spriteBody.body.setOffset( Ninjar._SPRITE_RIGHT_MOVEMENT_OFFSET_X, Ninjar._SPRITE_RIGHT_MOVEMENT_OFFSET_Y )
+
             this._dashDirection = "right"
             this.spriteBody.setVelocityX( Ninjar.MOVEMENT_SPEED )
             this.spriteBody.setFlipX( false )
@@ -168,6 +175,8 @@ export class Ninjar
         }
         else if ( a.isDown && !this._states.isActive( "dashing" ) )
         {
+            this._spriteBody.body.setOffset( Ninjar._SPRITE_LEFT_MOVEMENT_OFFSET_X, Ninjar._SPRITE_LEFT_MOVEMENT_OFFSET_Y )
+
             this._dashDirection = "left"
             this.spriteBody.setVelocityX( -Ninjar.MOVEMENT_SPEED )
             this.spriteBody.setFlipX( true )
@@ -221,14 +230,13 @@ export class Ninjar
         }
     }
 
+    // TODO: Wenn der Spieler gegen einen Block dashed, dafür sorgen, dass er nicht in diesem stecken bleibt
     dash( dashDirection: DashDirection )
     {
         this._states.activateState( "dashing" )
         this._allowedToDash = false
 
         this.handleAudioCues( this._scene, "dashCue" )
-
-        // this.playDashCue( this._scene, dashCue )
 
         const distance               = 200
         const { x : oldX, y : oldY } = this.spriteBody
