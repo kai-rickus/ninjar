@@ -1,4 +1,5 @@
 import { Bootloader } from './Bootloader';
+import { MainMenu }       from "./scenes/main-menu"
 import { SceneOne }   from './scenes/scene-one';
 import { SceneTwo }   from './scenes/scene-two';
 import { AUTO, Scale, Types } from 'phaser';
@@ -31,6 +32,7 @@ export const CONFIG: Types.Core.GameConfig = {
         }
     },
     scene           : [
+        MainMenu,
         SceneOne,
         SceneTwo,
     ]
