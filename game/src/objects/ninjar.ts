@@ -22,10 +22,11 @@ export class Ninjar
     private static readonly _DASH_KEY                       = "ninjar_dash"
     private static readonly _CROUCH_KEY                     = "ninjar_crouch"
     private static readonly _JUMP_CUE                       = "jump_cue"
-    private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_X = 40
-    private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_Y = 40
-    private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_X  = 50
-    private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_Y  = 40
+    private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_X = 45
+    private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_Y = 43
+    private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_X  = 60
+    private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_Y  = 43
+    private static readonly _SPRITE_OFFSET_Y  = 43
 
     private readonly _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody
     private _dashDirection: DashDirection = "right"
@@ -39,7 +40,7 @@ export class Ninjar
         this._spriteBody.setBounce( 0 )
         this._spriteBody.setCollideWorldBounds( true )
 
-        this._spriteBody.setSize( 30, 40 )
+        this._spriteBody.setSize( 15, 35 )
 
         this._spriteBody.body.setOffset( 40, 40 )
 
@@ -165,7 +166,7 @@ export class Ninjar
 
         if ( d.isDown && !this._states.isActive( "dashing" ) )
         {
-            this._spriteBody.body.setOffset( Ninjar._SPRITE_RIGHT_MOVEMENT_OFFSET_X, Ninjar._SPRITE_RIGHT_MOVEMENT_OFFSET_Y )
+            this._spriteBody.body.setOffset( Ninjar._SPRITE_RIGHT_MOVEMENT_OFFSET_X, Ninjar._SPRITE_OFFSET_Y )
 
             this._dashDirection = "right"
             this.spriteBody.setVelocityX( Ninjar.MOVEMENT_SPEED )
@@ -175,7 +176,7 @@ export class Ninjar
         }
         else if ( a.isDown && !this._states.isActive( "dashing" ) )
         {
-            this._spriteBody.body.setOffset( Ninjar._SPRITE_LEFT_MOVEMENT_OFFSET_X, Ninjar._SPRITE_LEFT_MOVEMENT_OFFSET_Y )
+            this._spriteBody.body.setOffset( Ninjar._SPRITE_LEFT_MOVEMENT_OFFSET_X, Ninjar._SPRITE_OFFSET_Y )
 
             this._dashDirection = "left"
             this.spriteBody.setVelocityX( -Ninjar.MOVEMENT_SPEED )
