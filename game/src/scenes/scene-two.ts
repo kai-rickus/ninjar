@@ -1,12 +1,12 @@
 import { Scene, Physics }              from 'phaser';
-import { WASD_CONTROLS, WASDControls } from '../objects/controls';
 import { FinishingFlag }               from '../objects/finishing-flag';
 import { Ninjar }                      from '../objects/ninjar';
+import { WASD_CONTROLS, WASDControls } from '../objects/controls';
 
 export class SceneTwo extends Scene
 {
     private static readonly _BACKGROUND_KEY = 'background';
-    private static readonly _GRASSTILE_KEY  = 'grasstile';
+    private static readonly _DIRT_TILE_ONE_KEY  = 'grasstile';
 
     private _player: Ninjar;
     private _finishingFlag: FinishingFlag;
@@ -26,6 +26,8 @@ export class SceneTwo extends Scene
     {
 
         this.load.image( SceneTwo._BACKGROUND_KEY, 'assets/images/backgrounds/kitchen-background.png' );
+        this.load.image( SceneTwo._DIRT_TILE_ONE_KEY, "assets/tiles/dirt_1.png" );
+
 
         this._controls = this.input.keyboard.addKeys( WASD_CONTROLS ) as WASDControls;
 
@@ -58,7 +60,7 @@ export class SceneTwo extends Scene
 
     finishLevel()
     {
-
+        // loading next level
     }
 
     createBackground()
@@ -72,7 +74,7 @@ export class SceneTwo extends Scene
         const platforms = this.physics.add.staticGroup();
 
         this._groundPlatforms = this.physics.add.staticGroup( {
-            key    : SceneTwo._GRASSTILE_KEY,
+            key    : SceneTwo._DIRT_TILE_ONE_KEY,
             repeat : 150,
             setXY  : { x : 0, y : 568, stepX : 15 }
         } );
