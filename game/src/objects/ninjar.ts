@@ -4,7 +4,6 @@ import { NinjarStateMachine }  from "./ninjar-state-machine"
 
 type DashDirection = "left" | "right"
 
-// TODO: Hitbox des Spielers an eigentliche Größe anpassen
 export class Ninjar
 {
     get spriteBody(): Phaser.Types.Physics.Arcade.SpriteWithDynamicBody
@@ -26,7 +25,7 @@ export class Ninjar
     private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_Y = 43
     private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_X  = 60
     private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_Y  = 43
-    private static readonly _SPRITE_OFFSET_Y  = 43
+    private static readonly _SPRITE_OFFSET_Y                = 43
 
     private readonly _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody
     private _dashDirection: DashDirection = "right"

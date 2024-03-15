@@ -1,4 +1,4 @@
-import { Scene, Physics }              from "phaser"
+import { Scene }              from "phaser"
 import { FinishingFlag }               from "../objects/finishing-flag"
 import { Ninjar }                      from "../objects/ninjar"
 import { WASD_CONTROLS, WASDControls } from "../objects/controls"
@@ -20,7 +20,7 @@ export class SceneOne extends Scene
     constructor()
     {
         super( {
-            key : "MainScene"
+            key : "SceneOne"
         } )
     }
 
@@ -69,7 +69,7 @@ export class SceneOne extends Scene
         this.physics.add.collider( this._finishingFlag.spriteBody, platforms )
     }
 
-    finishLevel( context, )
+    finishLevel(  )
     {
         /* TODO: add leveltransition */
         /* TODO: dem level-controller die Steuerung der level handlen lassen  */
@@ -83,7 +83,7 @@ export class SceneOne extends Scene
         grassland.setScale( 1.4, 1 )
     }
 
-    // TODO: das Aray mit der Anzahl der Blöcke verbessern. Kein hardgecodetes Array
+    // TODO: das Array mit der Anzahl der Blöcke verbessern. Kein hardgecodetes Array
     createPlatforms()
     {
         const platforms = this.physics.add.staticGroup()
@@ -97,7 +97,6 @@ export class SceneOne extends Scene
 
         for ( const tilex in this.tilesX )
         {
-            console.log( this._platformSpawnX )
             platforms.create( this._platformSpawnX, this._PlatformSpawnY, SceneOne._DIRT_TILE_ONE_KEY )
             this._platformSpawnX = this._platformSpawnX + 32
         }
@@ -105,7 +104,6 @@ export class SceneOne extends Scene
         this._platformSpawnX = 800
         for ( const tilex in this.tilesX )
         {
-            console.log( this._platformSpawnX )
             platforms.create( this._platformSpawnX, this._PlatformSpawnY - 60, SceneOne._DIRT_TILE_ONE_KEY )
             this._platformSpawnX = this._platformSpawnX + 32
         }
