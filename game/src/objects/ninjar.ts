@@ -20,18 +20,14 @@ export class Ninjar
     private static readonly _FALL_KEY                       = "ninjar_fall"
     private static readonly _DASH_KEY                       = "ninjar_dash"
     private static readonly _CROUCH_KEY                     = "ninjar_crouch"
-    private static readonly _JUMP_CUE                       = "jump_cue"
     private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_X = 45
-    private static readonly _SPRITE_RIGHT_MOVEMENT_OFFSET_Y = 43
     private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_X  = 60
-    private static readonly _SPRITE_LEFT_MOVEMENT_OFFSET_Y  = 43
     private static readonly _SPRITE_OFFSET_Y                = 43
 
     private readonly _spriteBody: Types.Physics.Arcade.SpriteWithDynamicBody
     private _dashDirection: DashDirection = "right"
     private _allowedToDash                = true
     private _states                       = new NinjarStateMachine()
-    private _jumpCue
 
     public constructor( x: number, y: number, private _scene: Scene, private _controls: WASDControls )
     {
@@ -202,7 +198,6 @@ export class Ninjar
         {
             this.spriteBody.setVelocityY( Ninjar.JUMP_HEIGHT )
             this.spriteBody.anims.play( "jump" )
-
             this.handleAudioCues( this._scene, "jumpCue" )
         }
 
