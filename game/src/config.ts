@@ -1,4 +1,5 @@
 import { Bootloader } from './Bootloader';
+import { GameOver }   from "./scenes/game-over"
 import { MainMenu }       from "./scenes/main-menu"
 import { SceneOne }   from './scenes/scene-one';
 import { SceneTwo }   from './scenes/scene-two';
@@ -35,5 +36,6 @@ export const CONFIG: Types.Core.GameConfig = {
         MainMenu,
         SceneOne,
         SceneTwo,
+        GameOver,
     ]
 };
