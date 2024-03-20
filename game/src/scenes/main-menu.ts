@@ -17,10 +17,12 @@ export class MainMenu extends Scene
     {
         this.load.image( "glass-panel", "assets/buttons/scroll-button.png" )
         this.load.image( "cursor-hand", "assets/cursors/menu-cursor.png" )
+        this.load.image( "ninjar-logo", "assets/game-logos/ninjar_main-screen.png" )
 
         this._controls = this.input.keyboard.addKeys( WASD_CONTROLS ) as WASDControls
-        this.load.audio('menu-change', 'assets/audio/menu/menu-change.mp3')
-        this.load.audio('menu-select', 'assets/audio/menu/menu-select.mp3')
+
+        this.load.audio( "menu-change", "assets/audio/menu/menu-change.mp3" )
+        this.load.audio( "menu-select", "assets/audio/menu/menu-select.mp3" )
 
     }
 
@@ -37,6 +39,11 @@ export class MainMenu extends Scene
         const settingsButtonText   = "Einstellungen"
         const creditsButtonText    = "Credits"
         const { width, height }    = this.scale
+
+        this.cameras.main.setBackgroundColor( "#B2D8FF" )
+
+        const menuLogo = this.add.image( width / 2, height / 3, "ninjar-logo" )
+                             .setScale( 0.3 )
 
         const playButton = this.add.image( width * centeredButtonWidth, height * centeredButtonHeight, "glass-panel" )
                                .setDisplaySize( buttonWidth, buttonHeight )
@@ -131,14 +138,14 @@ export class MainMenu extends Scene
         button.emit( "selected" )
     }
 
-    handleAudioCues(  Cue: string )
+    handleAudioCues( Cue: string )
     {
         const menuChange = this.sound.add( "menu-change" )
         const menuSelect = this.sound.add( "menu-select" )
 
         if ( Cue === "menu-change" )
         {
-            menuChange.setVolume( 0.01 )
+            menuChange.setVolume( 0.1 )
             menuChange.play()
         }
         else if ( Cue === "menu-select" )
