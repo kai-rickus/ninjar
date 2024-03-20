@@ -1,6 +1,6 @@
 import { WASD_CONTROLS, WASDControls } from "../objects/controls"
 import { SceneOne }                    from "./scene-one"
-import { Scene, Physics }              from "phaser"
+import { Scene }              from "phaser"
 
 export class MainMenu extends Scene
 {
@@ -18,11 +18,10 @@ export class MainMenu extends Scene
         this.load.image( "glass-panel", "assets/buttons/scroll-button.png" )
         this.load.image( "cursor-hand", "assets/cursors/menu-cursor.png" )
         this.load.image( "ninjar-logo", "assets/game-logos/ninjar_main-screen.png" )
-
-        this._controls = this.input.keyboard.addKeys( WASD_CONTROLS ) as WASDControls
-
         this.load.audio( "menu-change", "assets/audio/menu/menu-change.mp3" )
         this.load.audio( "menu-select", "assets/audio/menu/menu-select.mp3" )
+
+        this._controls = this.input.keyboard.addKeys( WASD_CONTROLS ) as WASDControls
 
     }
 
