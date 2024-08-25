@@ -1,8 +1,7 @@
 import { WASD_CONTROLS, WASDControls } from "../objects/controls"
-import { SceneOne }                    from "./scene-one"
 import { Scene }              from "phaser"
 
-export class MainMenu extends Scene
+export class Credits extends Scene
 {
     private _buttons: Phaser.GameObjects.Image[] = []
     private _selectedButtonIndex                 = 0
@@ -10,7 +9,9 @@ export class MainMenu extends Scene
 
     constructor( private _controls: WASDControls, private _scene: Scene )
     {
-        super( "main-menu" )
+        super( {
+            key : "Credits"
+        } )
     }
 
     preload()
@@ -34,15 +35,12 @@ export class MainMenu extends Scene
         const centeredButtonHeight = 0.6
         const cursorScale          = 0.4
         const buttonGap            = 10
-        const playButtonText       = "Spielen"
-        const settingsButtonText   = "Einstellungen"
-        const creditsButtonText    = "Credits"
+        const playButtonText       = "CREDITS"
+        const settingsButtonText   = "CREDITS"
+        const creditsButtonText    = "CREDITS"
         const { width, height }    = this.scale
 
         this.cameras.main.setBackgroundColor( "#B2D8FF" )
-
-        const menuLogo = this.add.image( width / 2, height / 3, "ninjar-logo" )
-                             .setScale( 0.3 )
 
         const playButton = this.add.image( width * centeredButtonWidth, height * centeredButtonHeight, "glass-panel" )
                                .setDisplaySize( buttonWidth, buttonHeight )
@@ -86,7 +84,6 @@ export class MainMenu extends Scene
         {
             // todo: credits implementieren
             console.log( "credits" )
-            this.startCreditScene()
         } )
     }
 
@@ -94,10 +91,6 @@ export class MainMenu extends Scene
     {
         this.scene.start( "SceneOne" )
     }
-
-    startCreditScene(){
-        this.scene.start("credits")
-}
 
     selectButton( index: number )
     {

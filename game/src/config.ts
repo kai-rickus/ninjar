@@ -1,17 +1,18 @@
-import { Bootloader } from './Bootloader';
-import { GameOver }   from "./scenes/game-over"
-import { MainMenu }       from "./scenes/main-menu"
-import { SceneOne }   from './scenes/scene-one';
-import { SceneTwo }   from './scenes/scene-two';
-import { AUTO, Scale, Types } from 'phaser';
+import { Bootloader }         from "./Bootloader"
+import { GameOver }           from "./scenes/game-over"
+import { MainMenu }           from "./scenes/main-menu"
+import { SceneOne }           from "./scenes/scene-one"
+import { SceneTwo }           from "./scenes/scene-two"
+import { Credits }            from "./scenes/credits"
+import { AUTO, Scale, Types } from "phaser"
 
 export const CONFIG: Types.Core.GameConfig = {
-    title           : 'NinJar',
-    version         : '0.0.1',
+    title           : "NinJar",
+    version         : "0.0.1",
     type            : AUTO,
-    backgroundColor : '#22A6B3',
+    backgroundColor : "#22A6B3",
     scale           : {
-        parent     : 'phaser_container',
+        parent     : "phaser_container",
         width      : 1280,
         height     : 720,
         mode       : Scale.FIT,
@@ -24,7 +25,7 @@ export const CONFIG: Types.Core.GameConfig = {
         pixelArt : true,
     },
     physics         : {
-        default : 'arcade',
+        default : "arcade",
         arcade  : {
             gravity : {
                 y : 300
@@ -33,9 +34,10 @@ export const CONFIG: Types.Core.GameConfig = {
         }
     },
     scene           : [
+        Credits,
         MainMenu,
         SceneOne,
         SceneTwo,
         GameOver,
     ]
-};
+}
