@@ -1,5 +1,6 @@
 import { Scene }                       from "phaser"
 import { WASD_CONTROLS, WASDControls } from "../objects/controls"
+import { MainMenu }                    from "./main-menu"
 
 export class GameOver extends Scene
 {
@@ -136,7 +137,7 @@ export class GameOver extends Scene
         }
         else if ( Cue === "game-over" )
         {
-            gameOver.setVolume( 1 )
+            gameOver.setVolume( 0.1 )
             gameOver.play()
         }
     }
